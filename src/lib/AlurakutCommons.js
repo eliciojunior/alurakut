@@ -27,7 +27,11 @@ export function AlurakutMenu({ githubUser }) {
         <AlurakutMenu.Logo src={`${BASE_URL}/logo.svg`} />
 
         <nav style={{ flex: 1 }}>
-          {[{ name: 'Inicio', slug: '/'}, {name: 'Amigos', slug: '/amigos'}, {name: 'Comunidades', slug: '/comunidades'}].map((menuItem) => (
+          {[
+            { name: 'Inicio', slug: '/'}, 
+            {name: 'Amigos', slug: '/amigos'}, 
+            {name: 'Comunidades', slug: '/comunidades'}
+          ].map((menuItem) => (
             <Link key={`key__${menuItem.name.toLocaleLowerCase()}`} href={`${menuItem.slug.toLocaleLowerCase()}`}>
               {menuItem.name}
             </Link>
@@ -269,7 +273,7 @@ export function OrkutNostalgicIconSet(props) {
         { name: 'Legal', slug: 'legal', icon: 'cool' },
         { name: 'Sexy', slug: 'sexy', icon: 'heart' },
       ].map(({ name, slug, icon }) => {
-        const total = props[slug] ? props[slug] : 2;
+        const total = props[slug] ? props[slug] : 3;
         return (
           <li key={`orkut__icon_set__${slug}`}>
             <span className="OrkutNostalgicIconSet__title">
