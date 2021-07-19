@@ -21,8 +21,20 @@ function ProfileSideBar(props){
   )
 }
 
+function ProfileRelationsBox(props){
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {props.title} ({props.itens.length})
+      </h2>
+      <ul>
+        
+      </ul>
+     </ProfileRelationsBoxWrapper>
+  )
+}
 export default function Home() {
-  const user = 'eliciojunior'
+  const user = 'omariosouto'
   const pessoaslista = [
     'filipedeschamps',
     'juunegreiros',
@@ -36,7 +48,16 @@ export default function Home() {
     nome: 'Eu odeio acordar cedo',
     capa: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
   }])
-  //const comunidade = ['Alurakut']
+  const [seguidores, setSeguidores] = React.useState([])
+  React.useEffect(function (){
+    fetch(`https://api.github.com/users/${user}/followers`)
+    .then(function (dadosGithub) {
+      return dadosGithub.json()
+    })
+    .then(function (dadosSeguidores){
+      setSeguidores(dadosSeguidores)
+    })
+  }, [])
   return (
     <>
     {/* Menu superior */}
@@ -52,7 +73,7 @@ export default function Home() {
       <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
         <Box>
           <h1 className="title">
-            Bem Vindo(a)
+            {`Bem Vindo(a) ${user}`}
           </h1>
 
           <OrkutNostalgicIconSet />
@@ -65,11 +86,15 @@ export default function Home() {
           <form onSubmit={function handleComunity(e){ //No submit do form captura o evento
             e.preventDefault() //Previne o form de atualizar a tela (comportamento default)
             const dadosForm = new FormData(e.target)
+            const nomeComunidade = dadosForm.get('comunityname')
+            let capaComunidade = dadosForm.get('comunityimage')
+            if(dadosForm.get('comunityimage') == ''){
+              capaComunidade = 'http://placehold.it/300x300'
+            }
             const comunidadeForm = {
               id: new Date().toISOString(),
-              nome: dadosForm.get('comunityname'),
-              capa: dadosForm.get('comunityimage')
-              //capa: 'http://placehold.it/300x300'
+              nome: nomeComunidade,
+              capa: capaComunidade
             }
             const comunidadeatual = [...comunidade, comunidadeForm] //Variável que faz o spreed da variavel
             //comunidade atual (espalhar cada um dos itens do array) e faz o push de mais uma comunidade
@@ -100,6 +125,7 @@ export default function Home() {
       
       {/* Coluna de atividades (Amigos/Grupos) */}
       <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+        <ProfileRelationsBox title={`Seguidores`} itens={seguidores}/>
         <ProfileRelationsBoxWrapper>
           <h2 className="smallTitle">
             Pessoas da comunidade ({pessoaslista.length})
